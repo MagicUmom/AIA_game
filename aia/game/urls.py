@@ -6,5 +6,5 @@ app_name = 'game'
 
 urlpatterns = [
     path( '', views.index, name='index'),
-
+    path( 'controll_pannel/', views.controll_pannel, name='controll_pannel'),
 ]

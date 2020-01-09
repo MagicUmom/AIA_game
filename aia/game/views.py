@@ -17,3 +17,10 @@ def index(request):
     }
     return HttpResponse(template.render( context ,request))
     # return HttpResponse('hello world')
+
+def controll_pannel(request):
+    template = loader.get_template('game/controll_pannel.html')
+    context = {
+
+    }
+    return HttpResponse(template.render( context ,request))

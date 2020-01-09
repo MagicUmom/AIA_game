@@ -1,0 +1,30 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html>
+<head>
+<script src="{% static 'game/controll_pannel.js' %}"></script>
+<link rel="stylesheet" type="text/css" href="{% static 'game/controll_pannel.css' %}">
+
+</head>
+<body>
+
+<div class='big_canvas'>
+    <div class='banner'>
+        <button class='btn_banner' id='btn_gameover'>Game_Over</button>
+        <button class='btn_banner' id='btn_newgame'>New_Game</button>
+    </div>
+    <div class='select'>
+        <button class='btn_select' id='btn_red'>紅</button>
+        <button class='btn_select' id='btn_white'>白</button>
+    </div>
+    <div class='confirm'>
+        <button class='btn_confirm' id='btn_confirm'>Confirm</button>
+    </div>
+    <div class='lock'>
+        <button class='btn_lock' id='btn_lock'>LOCK</button>
+    </div>
+</div>
+
+</body>
+</html>
