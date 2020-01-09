@@ -1,0 +1,58 @@
+{% load static %}
+
+
+<!DOCTYPE html>
+<html>
+<head>
+<script src="{% static 'AIA/myScript.js' %}"></script>
+<link rel="stylesheet" type="text/css" href="{% static 'game/style.css' %}">
+
+</head>
+<body>
+
+<!--
+<p id='demo'>THIS IS DEMO TEXT.</p>
+<button class="cutton">Click Me</button>
+<button class="cutton" onclick="myFunction()">try it</button>
+ -->
+
+<div class='big_canvas'>
+    <div class='aia_title'>
+        <p>AIA紅白合戰</p>
+    </div>
+    <div class='odds'>
+        <p> 紅 / 白</p>
+        <span class='odds_red'>1 </span>
+        <span class='odds_mark'> : <span>
+        <span class='odds_white'>5.12</span>
+    </div>
+    <div class='pools'>
+        <button class='pool' id='pool_red' onclick="pool_button(this)">已下注：</br>
+            <span id='text_pool_red'>0</span></br>
+            <span>紅</span>
+        </button>
+        <button class='pool' id='pool_white' onclick="pool_button(this)">已下注：</br>
+            <span id='text_pool_white'>0</span></br>
+            <span>白</span>
+        </button>
+    </div>
+    <div class='bet_amount'>
+        <p> 下注金額: <span id='amount'>0</span></p>
+    </div>
+    <div class='buttons_amount'>
+        <button class='button_amount' value=100 onclick="bet_button(this)">100</button>
+        <button class='button_amount' value=500 onclick="bet_button(this)">500</button>
+        <button class='button_amount' value=1000 onclick="bet_button(this)">1000</button>
+        <button class='button_amount' value=-1 onclick="bet_button(this)">清除</button>
+    </div>
+    <div class='balance_block'>
+        <p> 剩餘金額: <span class='balance' id='balance_count'>5000</span></p>
+    </div>
+
+
+
+</div>
+
+
+</body>
+</html>

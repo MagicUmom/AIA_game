@@ -11,9 +11,4 @@ def index(request):
     if not request.user.is_authenticated:
         return redirect('%s?next=%s' % (settings.LOGIN_URL, request.path))
 
-    template = loader.get_template('game/index.html')
-    context = {
-
-    }
-    return HttpResponse(template.render( context ,request))
-    # return HttpResponse('hello world')
+    return redirect('/game/')

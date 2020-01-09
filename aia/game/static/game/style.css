@@ -1,0 +1,70 @@
+body
+{
+background-image: url("./imgs/bg.png");
+background-repeat: repeat-y repeat-x;
+background-size: 30px;
+}
+
+.cutton {
+  display: inline-block;
+  padding: 15px 25px;
+  font-size: 24px;
+  cursor: pointer;
+  text-align: center;
+  text-decoration: none;
+  outline: none;
+  color: #fff;
+  background-color: #4CAF50;
+  border: none;
+  border-radius: 15px;
+  box-shadow: 0 9px #999;
+}
+
+.cutton:hover {background-color: #3e8e41}
+
+.cutton:active {
+  background-color: #3e8e41;
+  box-shadow: 0 5px #666;
+  transform: translateY(4px);
+}
+.big_canvas{
+    max-width: 400px;
+    border: 3px solid yellow;
+}
+.aia_title{
+    width: inherit;
+    text-align: center;
+}
+
+.odds{
+    width: inherit;
+    text-align: center;
+}
+.pools{
+    width: inherit;
+}
+.pool{
+    /* float:left; */
+    display: inline;
+    width: 45%;
+    padding-bottom: 40%;
+    text-align: center;
+}
+.bet_amount{
+    width: inherit;
+    text-align: center;
+}
+.buttons_amount{
+    width: inherit;
+    /* max-width: 200px; */
+    border: 3px solid red;
+}
+.button_amount{
+    width: 20%;
+    height: 50px;
+}
+
+.balance_block{
+    width: inherit;
+    text-align: center;
+}
