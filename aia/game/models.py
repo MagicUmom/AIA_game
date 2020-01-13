@@ -13,6 +13,10 @@ class game_detail(models.Model):
 class game_overview(models.Model):
     game_id = models.PositiveIntegerField()
     game_round = models.PositiveIntegerField()
-    is_activate = models.BooleanField(default=False)
     total_red = models.PositiveIntegerField()
     total_white = models.PositiveIntegerField()
+
+class game_controll(models.Model):
+    game_id = models.PositiveIntegerField()
+    game_round = models.PositiveIntegerField()
+    game_status = models.PositiveIntegerField()  ## 0: over 1: activate 2:locking
