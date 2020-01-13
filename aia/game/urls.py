@@ -12,4 +12,8 @@ urlpatterns = [
     path( 'admin_api/new_game',  views.admin_api_new_game,  name='admin_api_new_game' ),
     path( 'admin_api/confirm',   views.admin_api_confirm,   name='admin_api_confirm' ),
     path( 'admin_api/lock',      views.admin_api_lock,      name='admin_api_lock' ),
+
+    path( 'palyer_api/betting_red',      views.player_api_betting_red,      name='player_api_betting_red' ),
+    path( 'palyer_api/betting_white',    views.player_api_betting_white,    name='player_api_betting_white' ),
+    path( 'palyer_api/update_odds',      views.player_api_update_odds,      name='player_api_update_odds' ),
 ]

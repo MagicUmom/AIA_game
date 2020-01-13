@@ -21,17 +21,17 @@
     </div>
     <div class='odds'>
         <p> 紅 / 白</p>
-        <span class='odds_red'>1 </span>
+        <span class='odds_red'>{{ odds_red }}</span>
         <span class='odds_mark'> : <span>
-        <span class='odds_white'>5.12</span>
+        <span class='odds_white'>{{ odds_white }}</span>
     </div>
     <div class='pools'>
         <button class='pool' id='pool_red' onclick="pool_button(this)">已下注：</br>
-            <span id='text_pool_red'>0</span></br>
+            <span id='text_pool_red'>{{ user_bet_red }}</span></br>
             <span>紅</span>
         </button>
         <button class='pool' id='pool_white' onclick="pool_button(this)">已下注：</br>
-            <span id='text_pool_white'>0</span></br>
+            <span id='text_pool_white'>{{ user_bet_white }}</span></br>
             <span>白</span>
         </button>
     </div>
@@ -45,7 +45,7 @@
         <button class='button_amount' value=-1 onclick="bet_button(this)">清除</button>
     </div>
     <div class='balance_block'>
-        <p> 剩餘金額: <span class='balance' id='balance_count'>5000</span></p>
+        <p> 剩餘金額: <span class='balance' id='balance_count'>{{ user_balance }}</span></p>
     </div>
 
 
