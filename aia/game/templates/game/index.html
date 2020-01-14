@@ -3,10 +3,12 @@
 <!DOCTYPE html>
 <html>
 <head>
+
 <script src="{% static 'game/myScript.js' %}"></script>
 <link rel="stylesheet" type="text/css" href="{% static 'game/style.css' %}">
 </head>
 <body>
+    <meta name="viewport" content="user-scalable=no" />
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
 <script>
@@ -18,14 +20,35 @@
             console.log(data);
             // console.log(data['user_balance']);
             $('.balance').text(data['user_balance']);
+            $('#text_pool_red').text(data['user_bet_red']);
+            $('#text_pool_white').text(data['user_bet_white']);
             $('.odds_red_span').text(data['odds_red']);
             $('.odds_white_span').text(data['odds_white']);
+            total_balance = data['user_balance'];
         },
         dataType: "json",
         complete: setTimeout(function() {poll()}, 2000),
         timeout: 2000
     })
 })();
+window.onload = () => {
+  document.addEventListener('touchstart', (event) => {
+    if (event.touches.length > 1) {
+       event.preventDefault();
+    }
+  }, { passive: false });
+
+  let lastTouchEnd = 0;
+  document.addEventListener('touchend', (event) => {
+    const now = (new Date()).getTime();
+    if (now - lastTouchEnd <= 300) {
+      event.preventDefault();
+    }
+    lastTouchEnd = now;
+  }, false);
+}
+
+
 </script>
 
 <!-- <p id='demo'>THIS IS DEMO TEXT.</p>

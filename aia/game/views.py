@@ -122,6 +122,8 @@ def polling_apis(request):
                                             )[0]
     ret_dict ={
         "user_balance" : user_detail.balance,
+        "user_bet_red" : user_detail.bet_red,
+        "user_bet_white" : user_detail.bet_white,
         "odds_red" : odds.total_red,
         "odds_white" : odds.total_white,
     }
