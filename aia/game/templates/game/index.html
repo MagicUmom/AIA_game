@@ -5,44 +5,88 @@
 <head>
 <script src="{% static 'game/myScript.js' %}"></script>
 <link rel="stylesheet" type="text/css" href="{% static 'game/style.css' %}">
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+<script>
+  (function() {
+    var status = $('.status'),
+      poll = function() {
+        $.ajax({
+          url: './polling/balance',
+          dataType: 'text',
+          type: 'get',
+          success: function(data) { // check if available
+            status.text('Offline!');
+            if ( data.live ) { // get and check data value
+              status.text(data.info); // get and print data string
+              clearInterval(pollInterval); // optional: stop poll function
+            }
+          },
+          error: function() { // error logging
+            console.log('Error!');
+          }
+        });
+      },
+      pollInterval = setInterval(function() { // run function every 2000 ms
+        poll();
+        }, 2000);
+      poll(); // also run function on init
+  })();
+</script>
 
 </head>
 <body>
 
-<!--
-<p id='demo'>THIS IS DEMO TEXT.</p>
+
+<!-- <p id='demo'>THIS IS DEMO TEXT.</p>
 <button class="cutton">Click Me</button>
-<button class="cutton" onclick="myFunction()">try it</button>
- -->
+<button class="cutton" onclick="myFunction()">try it</button> -->
+
 
 <div class='big_canvas'>
     <div class='aia_title'>
-        <p>AIA紅白合戰</p>
+        <!-- <p>AIA紅白合戰</p> -->
     </div>
     <div class='odds'>
-        <p> 紅 / 白</p>
-        <span class='odds_red'>{{ odds_red }}</span>
-        <span class='odds_mark'> : <span>
-        <span class='odds_white'>{{ odds_white }}</span>
+        <div class='red'>
+            <span>紅</span>
+        </div>
+        <div class='white'>
+            <span>白</span>
+        </div>
+        <div class='odds_red'>
+            <span>{{ odds_red }}</span>
+        </div>
+        <div class='odds_mark'>
+            <span> : </span>
+        </div>
+        <div class='odds_white'>
+            <span>{{ odds_white }}</span>
+        </div>
     </div>
     <div class='pools'>
-        <button class='pool' id='pool_red' onclick="pool_button(this)">已下注：</br>
-            <span id='text_pool_red'>{{ user_bet_red }}</span></br>
-            <span>紅</span>
+        <button class='pool' id='pool_red' style="font-size:50px; color:#797979;" onclick="pool_button(this)">已下注</br>
+            <span id='text_pool_red' style="font-size:50px; color:#797979;">{{ user_bet_red }}</span></br>
+            <span style="color: #ea3427; font-size: 22vw;" >紅</span>
         </button>
-        <button class='pool' id='pool_white' onclick="pool_button(this)">已下注：</br>
-            <span id='text_pool_white'>{{ user_bet_white }}</span></br>
-            <span>白</span>
+        <button class='pool' id='pool_white' style="font-size:50px; color:#797979;" onclick="pool_button(this)">已下注</br>
+            <span id='text_pool_white' style="font-size:50px; color:#797979;">{{ user_bet_white }}</span></br>
+            <span style="color: #c98e27; font-size: 22vw;" >白</span>
         </button>
     </div>
     <div class='bet_amount'>
-        <p> 下注金額: <span id='amount'>0</span></p>
+        <div>
+            <p> 下注金額 </p>
+        </div>
+        <div id='amount'>
+            <span id='amount_span' style="font-size: 50px; color: #797979;">0</span>
+        </div>
     </div>
-    <div class='buttons_amount'>
-        <button class='button_amount' value=100 onclick="bet_button(this)">100</button>
-        <button class='button_amount' value=500 onclick="bet_button(this)">500</button>
-        <button class='button_amount' value=1000 onclick="bet_button(this)">1000</button>
-        <button class='button_amount' value=-1 onclick="bet_button(this)">清除</button>
+    <div class='buttons_amount' style="clear:both;">
+        <button class='button_amount group_red'     value=100 onclick="bet_button(this)">100</button>
+        <button class='button_amount group_gold'    value=500 onclick="bet_button(this)">500</button>
+        <button class='button_amount group_red'     value=1000 onclick="bet_button(this)">1000</button>
+        <!-- <button class='button_amount group_gold'    value=-1 onclick="bet_button(this)">清除</button> -->
+        <button class='button_amount group_gold'    value=-1 onclick="poll()">清除</button>
     </div>
     <div class='balance_block'>
         <p> 剩餘金額: <span class='balance' id='balance_count'>{{ user_balance }}</span></p>

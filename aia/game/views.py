@@ -61,14 +61,14 @@ def player_api_betting_red(request):
     else:
         obj_status = game_controll.objects.filter(game_status = 1)
         if len(obj_status) > 0:
-            game_detail.objects.filter(game_id=obj_status[0].game_id, 
-                                        game_round=obj_status[0].game_round, 
+            game_detail.objects.filter(game_id=obj_status[0].game_id,
+                                        game_round=obj_status[0].game_round,
                                         user_id=user).update(
                                             balance = F('balance') - int(now_bet_amount),
                                             bet_red = F('bet_red') + int(now_bet_amount)
                                             )
-            game_overview.objects.filter(game_id=obj_status[0].game_id, 
-                                        game_round=obj_status[0].game_round, 
+            game_overview.objects.filter(game_id=obj_status[0].game_id,
+                                        game_round=obj_status[0].game_round,
                                         ).update(
                                             total_red = F('total_red') + int(now_bet_amount),
                                         )
@@ -85,23 +85,33 @@ def player_api_betting_white(request):
     else:
         obj_status = game_controll.objects.filter(game_status = 1)
         if len(obj_status) > 0:
-            game_detail.objects.filter(game_id=obj_status[0].game_id, 
-                                        game_round=obj_status[0].game_round, 
+            game_detail.objects.filter(game_id=obj_status[0].game_id,
+                                        game_round=obj_status[0].game_round,
                                         user_id=user).update(
                                             balance = F('balance') - int(now_bet_amount),
                                             bet_white = F('bet_white') + int(now_bet_amount)
                                             )
-            game_overview.objects.filter(game_id=obj_status[0].game_id, 
-                                        game_round=obj_status[0].game_round, 
+            game_overview.objects.filter(game_id=obj_status[0].game_id,
+                                        game_round=obj_status[0].game_round,
                                         ).update(
                                             total_white = F('total_white') + int(now_bet_amount),
                                         )
-                                        
+
         return HttpResponse('player_api_betting_white updated')
 
 @login_required
 def player_api_update_odds(request):
         return HttpResponse('player_api_update_odds')
+
+# polling api
+@login_required
+def polling_odds(request):
+        return HttpResponse('polling_odds')
+
+@login_required
+def polling_balance(request):
+        return HttpResponse('polling_balance')
+
 
 # api admin
 def admin_api_game_over(request):
@@ -114,7 +124,7 @@ def admin_api_game_over(request):
 def admin_api_new_game(request):
     if request.user.is_superuser:
         users = User.objects.all()
-        
+
         game_controll.objects.filter(game_status = 1).update(game_status = 0)
         game_controll.objects.filter(game_status = 2).update(game_status = 0)
         tmp = game_controll.objects.all()

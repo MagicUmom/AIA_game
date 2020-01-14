@@ -1,4 +1,4 @@
-document.addEventListener("DOMContentLoaded", function(event) { 
+document.addEventListener("DOMContentLoaded", function(event) {
     window.now_bet_amount = 0;
     // window.bet_red = 0;
     // window.bet_white = 0;
@@ -10,10 +10,10 @@ function bet_button(elem){
     if(value>0){
         console.log(value);
         now_bet_amount += Number(value);
-        document.getElementById("amount").innerHTML = now_bet_amount;
+        document.getElementById("amount_span").innerHTML = now_bet_amount;
     }else{
         console.log(value);
-        document.getElementById("amount").innerHTML = 0;
+        document.getElementById("amount_span").innerHTML = 0;
         now_bet_amount = 0;
     }
 
@@ -32,10 +32,10 @@ function pool_button(elem){
             // TODO :
             // check if balance enough;;
             console.log("palyer_api/betting_red");
-            
-            
+
+
             document.getElementById("text_pool_red").innerHTML = Number(red_val) + now_bet_amount;
-            document.getElementById("amount").innerHTML = 0;
+            document.getElementById("amount_span").innerHTML = 0;
             update_balance(now_bet_amount);
             now_bet_amount = 0;
         }
@@ -51,9 +51,9 @@ function pool_button(elem){
             // TODO :
             // check if balance enough;;
             console.log("palyer_api/betting_white");
-            
+
             document.getElementById("text_pool_white").innerHTML = Number(white_val) + now_bet_amount;
-            document.getElementById("amount").innerHTML = 0;
+            document.getElementById("amount_span").innerHTML = 0;
             update_balance(now_bet_amount);
             now_bet_amount = 0;
         }
@@ -74,4 +74,3 @@ function isHaveMoney(value){
         return false;
     }
 }
-

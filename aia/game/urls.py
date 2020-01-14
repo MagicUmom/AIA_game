@@ -16,4 +16,7 @@ urlpatterns = [
     path( 'palyer_api/betting_red',      views.player_api_betting_red,      name='player_api_betting_red' ),
     path( 'palyer_api/betting_white',    views.player_api_betting_white,    name='player_api_betting_white' ),
     path( 'palyer_api/update_odds',      views.player_api_update_odds,      name='player_api_update_odds' ),
+
+    path( 'polling/balance',    views.polling_balance,  name='polling_balance'),
+    path( 'polling/odds',       views.polling_odds,     name='polling_odds'),
 ]
