@@ -19,12 +19,16 @@
         success: function(data) {
             console.log(data);
             // console.log(data['user_balance']);
-            $('.balance').text(data['user_balance']);
-            $('#text_pool_red').text(data['user_bet_red']);
-            $('#text_pool_white').text(data['user_bet_white']);
-            $('.odds_red_span').text(data['odds_red']);
-            $('.odds_white_span').text(data['odds_white']);
-            total_balance = data['user_balance'];
+            if( data['status'] == 1){
+                $('.balance').text(data['user_balance']);
+                $('#text_pool_red').text(data['user_bet_red']);
+                $('#text_pool_white').text(data['user_bet_white']);
+                $('.odds_red_span').text(data['odds_red']);
+                $('.odds_white_span').text(data['odds_white']);
+                total_balance = data['user_balance'];
+            }else{
+                console.log('game locking')
+            }
         },
         dataType: "json",
         complete: setTimeout(function() {poll()}, 2000),

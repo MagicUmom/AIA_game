@@ -26,6 +26,16 @@ def index(request):
         odds = game_overview.objects.filter(game_id = obj_game_controll[0].game_id,
                                             game_round=obj_game_controll[0].game_round,
                                             )[0]
+    else:
+        obj_game_controll = game_controll.objects.filter(game_status = 2)
+        user_detail = game_detail.objects.filter(game_id = obj_game_controll[0].game_id,
+                                                game_round=obj_game_controll[0].game_round,
+                                                user_id=user
+                                                )[0]
+
+        odds = game_overview.objects.filter(game_id = obj_game_controll[0].game_id,
+                                            game_round=obj_game_controll[0].game_round,
+                                            )[0]
 
     template = loader.get_template('game/index.html')
 
@@ -120,15 +130,61 @@ def polling_apis(request):
         odds = game_overview.objects.filter(game_id = obj_game_controll[0].game_id,
                                             game_round=obj_game_controll[0].game_round,
                                             )[0]
-    ret_dict ={
-        "user_balance" : user_detail.balance,
-        "user_bet_red" : user_detail.bet_red,
-        "user_bet_white" : user_detail.bet_white,
-        "odds_red" : odds.total_red,
-        "odds_white" : odds.total_white,
-    }
-    ret_json = json.dumps(ret_dict)
-    return HttpResponse(ret_json)
+        if odds.total_white == 0 or odds.total_red == 0:
+            odds_red = odds.total_red
+            odds_white = odds.total_white
+        else:
+            if odds.total_red > odds.total_white:
+                odds_red = 1
+                odds_white = round(odds.total_red / odds.total_white, 3)
+            else:
+                odds_red = round(odds.total_white / odds.total_red, 3)
+                odds_white = 1
+
+        ret_dict ={
+            "status"       : 1,
+            "user_balance" : user_detail.balance,
+            "user_bet_red" : user_detail.bet_red,
+            "user_bet_white" : user_detail.bet_white,
+            "odds_red" : odds_red,
+            "odds_white" : odds_white,
+        }
+        ret_json = json.dumps(ret_dict)
+        return HttpResponse(ret_json)
+    else:
+        obj_game_controll = game_controll.objects.filter(game_status = 2)
+        if len(obj_game_controll) > 0:
+            user_detail = game_detail.objects.filter(game_id = obj_game_controll[0].game_id,
+                                                    game_round=obj_game_controll[0].game_round,
+                                                    user_id=user
+                                                    )[0]
+
+            odds = game_overview.objects.filter(game_id = obj_game_controll[0].game_id,
+                                                game_round=obj_game_controll[0].game_round,
+                                                )[0]
+            if odds.total_red > odds.total_white:
+                odds_red = 1
+                odds_white = round(odds.total_red / odds.total_white, 3)
+            else:
+                odds_red = round(odds.total_white / odds.total_red, 3)
+                odds_white = 1
+
+            ret_dict ={
+                "status"       : 1,
+                "user_balance" : user_detail.balance,
+                "user_bet_red" : user_detail.bet_red,
+                "user_bet_white" : user_detail.bet_white,
+                "odds_red" : odds_red,
+                "odds_white" : odds_white,
+            }
+            ret_json = json.dumps(ret_dict)
+            return HttpResponse(ret_json)
+        else:
+            ret_dict ={
+                "status"       : 0,
+            }
+            ret_json = json.dumps(ret_dict)
+            return HttpResponse(ret_json)
 
 
 
@@ -167,11 +223,62 @@ def admin_api_new_game(request):
 
         return HttpResponse('admin_api_new_game')
 
+@csrf_exempt
 def admin_api_confirm(request):
     if request.user.is_superuser:
-        win = request.GET.get('btn','')
-        if (win != None):
-            return HttpResponse('admin_api_confirm {}'.format(win))
+        win = request.GET.get('btn','')  # win = 1 : red win ;; win =2 : white win;;
+        obj_game_controll = game_controll.objects.filter(game_status = 2)
+        odds = game_overview.objects.filter(game_id = obj_game_controll[0].game_id,
+                                            game_round=obj_game_controll[0].game_round,
+                                            )[0]
+        obj_game_detail = game_detail.objects.filter(game_id = obj_game_controll[0].game_id,
+                                                    game_round  = obj_game_controll[0].game_round,
+                                                    )
+
+        total_money = odds.total_red + odds.total_white
+
+
+        if win == '1':
+            for obj in obj_game_detail:
+                if odds.total_red != 0:
+                    gain_money = int((obj.bet_red // odds.total_red) * total_money)
+                else:
+                    gain_money = 0
+                game_detail.objects.create( game_id = obj_game_controll[0].game_id,
+                                    game_round = obj_game_controll[0].game_round +1,
+                                    user_id = obj.user_id,
+                                    balance = obj.balance + gain_money,
+                                    bet_red = 0,
+                                    bet_white = 0,
+                                    )
+        elif win == '2':
+            for obj in obj_game_detail:
+                if odds.total_white != 0:
+                    gain_money = int((obj.bet_white // odds.total_white) * total_money)
+                else:
+                    gain_money = 0
+                game_detail.objects.create( game_id = obj_game_controll[0].game_id,
+                                    game_round = obj_game_controll[0].game_round +1,
+                                    user_id = obj.user_id,
+                                    balance = obj.balance + gain_money,
+                                    bet_red = 0,
+                                    bet_white = 0,
+                                    )
+
+        ## create new round
+        game_controll.objects.create( game_id = obj_game_controll[0].game_id,
+                                    game_round = obj_game_controll[0].game_round +1,
+                                    game_status = 1,
+                                    )
+        game_overview.objects.create(game_id = obj_game_controll[0].game_id,
+                                    game_round = obj_game_controll[0].game_round +1,
+                                    total_red = 0,
+                                    total_white = 0,
+                                    )
+        ## close this round 
+        game_controll.objects.filter(game_status = 2).update( game_status = 0)
+
+    return HttpResponse('admin_api_confirm')
 
 def admin_api_lock(request):
     if request.user.is_superuser:
