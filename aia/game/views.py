@@ -8,6 +8,7 @@ from game.models import game_controll, game_detail, game_overview
 from django.contrib.auth.models import User
 from django.db.models import Max, F
 from django.views.decorators.csrf import csrf_exempt
+import json
 
 # @login_required
 def index(request):
@@ -107,13 +108,26 @@ def player_api_update_odds(request):
 # polling api
 @login_required
 @csrf_exempt
-def polling_odds(request):
-        return HttpResponse('polling_odds')
+def polling_apis(request):
+    user = request.user
+    obj_game_controll = game_controll.objects.filter(game_status = 1)
+    if len(obj_game_controll) > 0:
+        user_detail = game_detail.objects.filter(game_id = obj_game_controll[0].game_id,
+                                                game_round=obj_game_controll[0].game_round,
+                                                user_id=user
+                                                )[0]
 
-@login_required
-@csrf_exempt
-def polling_balance(request):
-        return HttpResponse('polling_balance')
+        odds = game_overview.objects.filter(game_id = obj_game_controll[0].game_id,
+                                            game_round=obj_game_controll[0].game_round,
+                                            )[0]
+    ret_dict ={
+        "user_balance" : user_detail.balance,
+        "odds_red" : odds.total_red,
+        "odds_white" : odds.total_white,
+    }
+    ret_json = json.dumps(ret_dict)
+    return HttpResponse(ret_json)
+
 
 
 # api admin

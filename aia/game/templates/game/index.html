@@ -12,13 +12,17 @@
 <script>
 (function poll() {
     $.ajax({
-        url: "./polling/balance",
+        url: "./polling/apis",
         type: "POST",
         success: function(data) {
             console.log(data);
+            // console.log(data['user_balance']);
+            $('.balance').text(data['user_balance']);
+            $('.odds_red_span').text(data['odds_red']);
+            $('.odds_white_span').text(data['odds_white']);
         },
-        dataType: "text",
-        complete: setTimeout(function() {poll()}, 5000),
+        dataType: "json",
+        complete: setTimeout(function() {poll()}, 2000),
         timeout: 2000
     })
 })();
@@ -41,13 +45,13 @@
             <span>白</span>
         </div>
         <div class='odds_red'>
-            <span>{{ odds_red }}</span>
+            <span class='odds_red_span'>{{ odds_red }}</span>
         </div>
         <div class='odds_mark'>
             <span> : </span>
         </div>
         <div class='odds_white'>
-            <span>{{ odds_white }}</span>
+            <span class='odds_white_span'>{{ odds_white }}</span>
         </div>
     </div>
     <div class='pools'>
