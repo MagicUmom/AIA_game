@@ -5,37 +5,24 @@
 <head>
 <script src="{% static 'game/myScript.js' %}"></script>
 <link rel="stylesheet" type="text/css" href="{% static 'game/style.css' %}">
-<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
-<script>
-  (function() {
-    var status = $('.status'),
-      poll = function() {
-        $.ajax({
-          url: './polling/balance',
-          dataType: 'text',
-          type: 'get',
-          success: function(data) { // check if available
-            status.text('Offline!');
-            if ( data.live ) { // get and check data value
-              status.text(data.info); // get and print data string
-              clearInterval(pollInterval); // optional: stop poll function
-            }
-          },
-          error: function() { // error logging
-            console.log('Error!');
-          }
-        });
-      },
-      pollInterval = setInterval(function() { // run function every 2000 ms
-        poll();
-        }, 2000);
-      poll(); // also run function on init
-  })();
-</script>
-
 </head>
 <body>
 
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+<script>
+(function poll() {
+    $.ajax({
+        url: "./polling/balance",
+        type: "POST",
+        success: function(data) {
+            console.log(data);
+        },
+        dataType: "text",
+        complete: setTimeout(function() {poll()}, 5000),
+        timeout: 2000
+    })
+})();
+</script>
 
 <!-- <p id='demo'>THIS IS DEMO TEXT.</p>
 <button class="cutton">Click Me</button>
@@ -85,8 +72,7 @@
         <button class='button_amount group_red'     value=100 onclick="bet_button(this)">100</button>
         <button class='button_amount group_gold'    value=500 onclick="bet_button(this)">500</button>
         <button class='button_amount group_red'     value=1000 onclick="bet_button(this)">1000</button>
-        <!-- <button class='button_amount group_gold'    value=-1 onclick="bet_button(this)">清除</button> -->
-        <button class='button_amount group_gold'    value=-1 onclick="poll()">清除</button>
+        <button class='button_amount group_gold'    value=-1 onclick="bet_button(this)">清除</button>
     </div>
     <div class='balance_block'>
         <p> 剩餘金額: <span class='balance' id='balance_count'>{{ user_balance }}</span></p>

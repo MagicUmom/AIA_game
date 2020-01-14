@@ -7,6 +7,7 @@ from django.conf import settings
 from game.models import game_controll, game_detail, game_overview
 from django.contrib.auth.models import User
 from django.db.models import Max, F
+from django.views.decorators.csrf import csrf_exempt
 
 # @login_required
 def index(request):
@@ -105,10 +106,12 @@ def player_api_update_odds(request):
 
 # polling api
 @login_required
+@csrf_exempt
 def polling_odds(request):
         return HttpResponse('polling_odds')
 
 @login_required
+@csrf_exempt
 def polling_balance(request):
         return HttpResponse('polling_balance')
 
