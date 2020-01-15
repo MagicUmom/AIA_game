@@ -289,3 +289,11 @@ def admin_api_lock(request):
     if request.user.is_superuser:
         game_controll.objects.filter(game_status = 1).update(game_status = 2)
         return HttpResponse('admin_api_lock')
+
+
+def testing_page(request):
+    template = loader.get_template('game/testing.html')
+
+    context = {
+    }
+    return HttpResponse(template.render( context ,request))
