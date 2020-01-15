@@ -162,12 +162,17 @@ def polling_apis(request):
             odds = game_overview.objects.filter(game_id = obj_game_controll[0].game_id,
                                                 game_round=obj_game_controll[0].game_round,
                                                 )[0]
-            if odds.total_red > odds.total_white:
-                odds_red = 1
-                odds_white = round(odds.total_red / odds.total_white, 3)
+
+            if odds.total_white == 0 or odds.total_red == 0:
+                odds_red = odds.total_red
+                odds_white = odds.total_white
             else:
-                odds_red = round(odds.total_white / odds.total_red, 3)
-                odds_white = 1
+                if odds.total_red > odds.total_white:
+                    odds_red = 1
+                    odds_white = round(odds.total_red / odds.total_white, 3)
+                else:
+                    odds_red = round(odds.total_white / odds.total_red, 3)
+                    odds_white = 1
 
             ret_dict ={
                 "status"       : 1,
@@ -237,24 +242,24 @@ def admin_api_confirm(request):
 
         total_money = odds.total_red + odds.total_white
 
-
         if win == '1':
             for obj in obj_game_detail:
                 if odds.total_red != 0:
-                    gain_money = int((obj.bet_red // odds.total_red) * total_money)
+                    gain_money = int((obj.bet_red / odds.total_red) * total_money)
+                    print(obj.user_id, gain_money, obj.bet_red , odds.total_red , total_money)
                 else:
                     gain_money = 0
                 game_detail.objects.create( game_id = obj_game_controll[0].game_id,
                                     game_round = obj_game_controll[0].game_round +1,
                                     user_id = obj.user_id,
-                                    balance = obj.balance + gain_money,
+                                    balance = obj.balance + gain_money ,
                                     bet_red = 0,
                                     bet_white = 0,
                                     )
         elif win == '2':
             for obj in obj_game_detail:
                 if odds.total_white != 0:
-                    gain_money = int((obj.bet_white // odds.total_white) * total_money)
+                    gain_money = int((obj.bet_white / odds.total_white) * total_money)
                 else:
                     gain_money = 0
                 game_detail.objects.create( game_id = obj_game_controll[0].game_id,
@@ -275,7 +280,7 @@ def admin_api_confirm(request):
                                     total_red = 0,
                                     total_white = 0,
                                     )
-        ## close this round 
+        ## close this round
         game_controll.objects.filter(game_status = 2).update( game_status = 0)
 
     return HttpResponse('admin_api_confirm')
